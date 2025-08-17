@@ -21,7 +21,7 @@ def rand_str(length=32, type="lower_hex"):
     """
     生成指定长度的随机字符串或者数字, 可以用于密钥等安全场景
     :param length: 字符串或者数字的长度
-    :param type: str 代表随机字符串，num 代表随机数字
+    :param type: str 代表随机字符串, num 代表随机数字
     :return: 字符串
     """
     if type == "str":

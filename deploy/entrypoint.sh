@@ -72,9 +72,9 @@ done
 # User creation is now handled in Dockerfile
 # Ensure proper permissions
 chown -R user:user $DATA $APP/dist
-# Give nginx access to necessary directories
-chown -R nginx:nginx /data/log /tmp
-chmod 755 /data/log /tmp
+# Create nginx log directory with proper permissions (avoid system dirs)
+mkdir -p /data/log/nginx
+chown -R user:user /data/log
 find $DATA/test_case -type d -exec chmod 710 {} \; 2>/dev/null || true
 find $DATA/test_case -type f -exec chmod 640 {} \; 2>/dev/null || true
 exec supervisord -c /app/deploy/supervisord.conf
