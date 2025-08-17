@@ -36,7 +36,6 @@ RUN apt-get update && \
     supervisor \
     openssl \
     nginx \
-    libnginx-mod-http-http2 \
     curl \
     unzip \
     && rm -rf /var/lib/apt/lists/*

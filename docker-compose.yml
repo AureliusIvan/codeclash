@@ -22,7 +22,9 @@ services:
     restart: unless-stopped
 
   oj-backend:
-    build: .
+    build:
+      context: .
+      dockerfile: Coolify.Dockerfile
     container_name: oj-backend
     environment:
       - OJ_ENV=production
