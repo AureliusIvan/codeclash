@@ -40,7 +40,7 @@ RUN apt-get update && \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -r user && useradd -r -g user user
+RUN groupadd -r user && groupadd -g 903 spj && useradd -r -g user -G spj user && useradd -u 900 -r -g spj -s /bin/false server
 RUN mkdir -p /home/user/.local && chown -R user:user /home/user
 USER user
 
@@ -57,6 +57,6 @@ RUN chmod -R u=rwX,go=rX ./ && \
     chown -R user:user /data
 USER user
 
-HEALTHCHECK --interval=5s CMD [ "/usr/local/bin/python3", "/app/deploy/health_check.py" ]
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 CMD [ "/usr/local/bin/python3", "/app/deploy/health_check.py" ]
 EXPOSE 8000
 ENTRYPOINT [ "/app/deploy/entrypoint.sh" ]

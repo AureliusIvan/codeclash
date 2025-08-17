@@ -5,9 +5,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'HOST': get_env("POSTGRES_HOST", "oj-postgres"),
         'PORT': get_env("POSTGRES_PORT", "5432"),
-        'NAME': get_env("POSTGRES_DB"),
-        'USER': get_env("POSTGRES_USER"),
-        'PASSWORD': get_env("POSTGRES_PASSWORD")
+        'NAME': get_env("POSTGRES_DB", "onlinejudge"),
+        'USER': get_env("POSTGRES_USER", "onlinejudge"),
+        'PASSWORD': get_env("POSTGRES_PASSWORD", "onlinejudge")
     }
 }
 

@@ -60,7 +60,7 @@ while [ $n -lt 5 ]
 do
     python manage.py migrate --no-input &&
     python manage.py inituser --username=root --password=rootroot --action=create_super_admin &&
-    echo "from options.options import SysOptions; SysOptions.judge_server_token='$JUDGE_SERVER_TOKEN'" | python manage.py shell &&
+    echo "from options.options import SysOptions; SysOptions.judge_server_token='${JUDGE_SERVER_TOKEN:-default_token}'" | python manage.py shell &&
     echo "from conf.models import JudgeServer; JudgeServer.objects.update(task_number=0)" | python manage.py shell &&
     break
     n=$(($n+1))
@@ -68,10 +68,9 @@ do
     sleep 8
 done
 
-addgroup -g 903 spj
-adduser -u 900 -S -G spj server
-
-chown -R server:spj $DATA $APP/dist
-find $DATA/test_case -type d -exec chmod 710 {} \;
-find $DATA/test_case -type f -exec chmod 640 {} \;
+# User creation is now handled in Dockerfile
+# Ensure proper permissions
+chown -R user:user $DATA $APP/dist
+find $DATA/test_case -type d -exec chmod 710 {} \; 2>/dev/null || true
+find $DATA/test_case -type f -exec chmod 640 {} \; 2>/dev/null || true
 exec supervisord -c /app/deploy/supervisord.conf
