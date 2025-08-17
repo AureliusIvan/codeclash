@@ -39,7 +39,7 @@ fi
 
 if [ -z "$MAX_WORKER_NUM" ]; then
     export CPU_CORE_NUM=$(grep -c ^processor /proc/cpuinfo)
-    if [[ $CPU_CORE_NUM -lt 2 ]]; then
+    if [ $CPU_CORE_NUM -lt 2 ]; then
         export MAX_WORKER_NUM=2
     else
         export MAX_WORKER_NUM=$(($CPU_CORE_NUM))
@@ -58,6 +58,7 @@ cd $APP
 n=0
 while [ $n -lt 5 ]
 do
+    python manage.py makemigrations --no-input &&
     python manage.py migrate --no-input &&
     python manage.py inituser --username=root --password=rootroot --action=create_super_admin &&
     echo "from options.options import SysOptions; SysOptions.judge_server_token='${JUDGE_SERVER_TOKEN:-default_token}'" | python manage.py shell &&
@@ -71,6 +72,9 @@ done
 # User creation is now handled in Dockerfile
 # Ensure proper permissions
 chown -R user:user $DATA $APP/dist
+# Give nginx access to necessary directories
+chown -R nginx:nginx /data/log /tmp
+chmod 755 /data/log /tmp
 find $DATA/test_case -type d -exec chmod 710 {} \; 2>/dev/null || true
 find $DATA/test_case -type f -exec chmod 640 {} \; 2>/dev/null || true
 exec supervisord -c /app/deploy/supervisord.conf

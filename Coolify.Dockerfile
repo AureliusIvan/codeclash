@@ -40,7 +40,10 @@ RUN apt-get update && \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -r user && groupadd -g 903 spj && useradd -r -g user -G spj user && useradd -u 900 -r -g spj -s /bin/false server
+RUN groupadd -r user && groupadd -g 903 spj && groupadd -r nginx && \
+    useradd -r -g user -G spj user && \
+    useradd -u 900 -r -g spj -s /bin/false server && \
+    useradd -r -g nginx -s /bin/false nginx
 RUN mkdir -p /home/user/.local && chown -R user:user /home/user
 USER user
 
