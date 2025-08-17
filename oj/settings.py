@@ -10,7 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 import os
-import raven
+try:
+    import raven  # noqa: F401
+    _HAS_RAVEN = True
+except Exception:
+    _HAS_RAVEN = False
 from copy import deepcopy
 import submission
 from utils.shortcuts import get_env
@@ -38,7 +42,7 @@ VENDOR_APPS = [
     'django_dbconn_retry',
 ]
 
-if production_env:
+if production_env and os.environ.get('SENTRY_DSN') and _HAS_RAVEN:
     VENDOR_APPS.append('raven.contrib.django.raven_compat')
 
 
@@ -149,7 +153,7 @@ CSRF_TRUSTED_ORIGINS = [
 SESSION_COOKIE_AGE = 60 * 60 * 24  # 24 hours
 SESSION_SAVE_EVERY_REQUEST = True
 
-LOGGING_HANDLERS = ['console', 'sentry'] if production_env else ['console']
+LOGGING_HANDLERS = ['console']
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -245,9 +249,10 @@ DRAMATIQ_RESULT_BACKEND = {
     }
 }
 
-RAVEN_CONFIG = {
-    'dsn': 'https://b200023b8aed4d708fb593c5e0a6ad3d:1fddaba168f84fcf97e0d549faaeaff0@sentry.io/263057'
-}
+if production_env and os.environ.get('SENTRY_DSN') and _HAS_RAVEN:
+    RAVEN_CONFIG = {
+        'dsn': os.environ['SENTRY_DSN']
+    }
 
 IP_HEADER = "HTTP_X_REAL_IP"
 
