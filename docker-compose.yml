@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  oj-postgres:
+    image: postgres:13
+    container_name: oj-postgres
+    environment:
+      POSTGRES_DB: onlinejudge
+      POSTGRES_USER: onlinejudge
+      POSTGRES_PASSWORD: onlinejudge123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+
+  oj-redis:
+    image: redis:6-alpine
+    container_name: oj-redis
+    ports:
+      - "6380:6379"
+    restart: unless-stopped
+
+  oj-backend:
+    build: .
+    container_name: oj-backend
+    environment:
+      - OJ_ENV=production
+      - POSTGRES_HOST=oj-postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=onlinejudge
+      - POSTGRES_USER=onlinejudge
+      - POSTGRES_PASSWORD=onlinejudge123
+      - REDIS_HOST=oj-redis
+      - REDIS_PORT=6379
+      - JUDGE_SERVER_TOKEN=your_secure_token_here_change_this
+    volumes:
+      - oj_data:/data
+    ports:
+      - "8001:8000"
+    depends_on:
+      - oj-postgres
+      - oj-redis
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  oj_data:
