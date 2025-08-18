@@ -80,4 +80,6 @@ if [ "$(id -u)" -eq 0 ]; then
 fi
 find $DATA/test_case -type d -exec chmod 710 {} \; 2>/dev/null || true
 find $DATA/test_case -type f -exec chmod 640 {} \; 2>/dev/null || true
+# Ensure nginx temp dirs exist and are writable
+mkdir -p /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/uwsgi /tmp/nginx/scgi
 exec supervisord -c /app/deploy/supervisord.conf
