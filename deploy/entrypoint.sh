@@ -72,10 +72,12 @@ done
 # Ensure proper permissions
 chown -R user:user $DATA $APP/dist
 # Create nginx log directory with proper permissions (avoid system dirs)
-mkdir -p /data/log/nginx
-touch /data/log/nginx/nginx_access.log /data/log/nginx/nginx_error.log
-chown -R nginx:nginx /data/log/nginx
-chown -R user:user /data/log
+if [ "$(id -u)" -eq 0 ]; then
+    mkdir -p /data/log/nginx
+    touch /data/log/nginx/nginx_access.log /data/log/nginx/nginx_error.log
+    chown -R nginx:nginx /data/log/nginx || true
+    chown -R user:user /data/log || true
+fi
 find $DATA/test_case -type d -exec chmod 710 {} \; 2>/dev/null || true
 find $DATA/test_case -type f -exec chmod 640 {} \; 2>/dev/null || true
 exec supervisord -c /app/deploy/supervisord.conf

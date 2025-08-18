@@ -11,6 +11,8 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('submission', '0006_auto_20170830_1154'),
+        ('contest', '0001_initial'),
+        ('problem', '0001_initial'),
     ]
 
     operations = [
