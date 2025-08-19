@@ -1,5 +1,10 @@
 from utils.shortcuts import get_env
 
+INSTALLED_APPS = [
+    'corsheaders',
+]
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -38,6 +43,9 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False
+
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'None'
 
 CORS_ALLOWED_HEADERS = [
     'accept',
