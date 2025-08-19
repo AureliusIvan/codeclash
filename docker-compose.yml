@@ -22,10 +22,9 @@ services:
     restart: unless-stopped
 
   oj-backend:
-    image: my-onlinejudge-backend:v1.6
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Coolify.Dockerfile
     container_name: oj-backend
     environment:
       - OJ_ENV=production
