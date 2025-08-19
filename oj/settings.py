@@ -40,6 +40,7 @@ VENDOR_APPS = [
     'rest_framework',
     'django_dramatiq',
     'django_dbconn_retry',
+    'corsheaders',
 ]
 
 if production_env and os.environ.get('SENTRY_DSN') and _HAS_RAVEN:
@@ -61,6 +62,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = VENDOR_APPS + LOCAL_APPS
 
 MIDDLEWARE = (
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

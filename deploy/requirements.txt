@@ -21,3 +21,4 @@ python-dotenv==1.0.0
 qrcode==7.4.2
 raven==6.10.0
 XlsxWriter==3.1.9
+django-cors-headers==3.13.0

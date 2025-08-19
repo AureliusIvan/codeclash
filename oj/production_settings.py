@@ -27,3 +27,11 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+#Cors Settings
+CORS_ALLOWED_ORIGINS = [
+    "https://www.codeclash.page",
+    "https://codeclash.page",
+]
+
+CORS_ALLOW_CREDENTIALS = True
