@@ -16,7 +16,7 @@ REDIS_CONF = {
     "port": get_env("REDIS_PORT", "6379")
 }
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["www.codeclash.page", "codeclash.page", "backend.codeclash.page"]
 CSRF_TRUSTED_ORIGINS = ["https://www.codeclash.page", "https://codeclash.page", "https://backend.codeclash.page"]
