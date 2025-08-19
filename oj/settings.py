@@ -145,10 +145,10 @@ CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
 CSRF_COOKIE_HTTPONLY = False  # Allow JavaScript to read CSRF token
 CSRF_COOKIE_SAMESITE = 'Lax'
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8080',
-    'http://127.0.0.1:8080',
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://localhost:8080',
+#     'http://127.0.0.1:8080',
+# ]
 
 SESSION_COOKIE_AGE = 60 * 60 * 24  # 24 hours
 SESSION_SAVE_EVERY_REQUEST = True
