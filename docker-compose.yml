@@ -21,6 +21,28 @@ services:
       - "6380:6379"
     restart: unless-stopped
 
+  oj-judge:
+    image: registry.cn-hongkong.aliyuncs.com/oj-image/judge:1.6.1
+    restart: always
+    read_only: true
+    cap_drop:
+      - SETPCAP
+      - MKNOD
+      - NET_BIND_SERVICE
+      - SYS_CHROOT
+      - SETFCAP
+      - FSETID
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./data/backend/test_case:/test_case:ro
+      - ./data/judge_server/log:/log
+      - ./data/judge_server/run:/judger
+    environment:
+      - SERVICE_URL=http://oj-judge:8080
+      - BACKEND_URL=http://oj-backend:8000/api/judge_server_heartbeat/
+      - TOKEN=CHANGE_THIS
+
   oj-backend:
     build:
       context: .
