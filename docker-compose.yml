@@ -59,7 +59,7 @@ services:
       - REDIS_PORT=6379
       - JUDGE_SERVER_TOKEN=your_secure_token_here_change_this
     volumes:
-      - oj_data:/data
+      - ./data/backend:/data
     ports:
       - "8001:8000"
     depends_on:
