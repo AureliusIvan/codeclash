@@ -57,7 +57,9 @@ USER root
 RUN chmod -R u=rwX,go=rX ./ && \
     chmod +x ./deploy/entrypoint.sh && \
     mkdir -p /data && \
-    chown -R user:user /data
+    chown -R user:user /data && \
+    mkdir -p /data/log/nginx /var/cache/nginx /var/run/nginx && \
+    chown -R nginx:nginx /data/log/nginx /var/cache/nginx /var/run/nginx
 USER user
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 CMD [ "/usr/local/bin/python3", "/app/deploy/health_check.py" ]
