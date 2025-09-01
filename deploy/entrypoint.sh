@@ -10,11 +10,11 @@ if [ ! -f "$DATA/config/secret.key" ]; then
 fi
 
 if [ ! -f "$DATA/public/avatar/default.png" ]; then
-    cp data/public/avatar/default.png $DATA/public/avatar
+    cp $APP/data/public/avatar/default.png $DATA/public/avatar
 fi
 
 if [ ! -f "$DATA/public/website/favicon.ico" ]; then
-    cp data/public/website/favicon.ico $DATA/public/website
+    cp $APP/data/public/website/favicon.ico $DATA/public/website
 fi
 
 SSL="$DATA/ssl"
@@ -58,7 +58,7 @@ cd $APP
 n=0
 while [ $n -lt 5 ]
 do
-    python manage.py migrate --no-input --fake-initial &&
+    # python manage.py migrate --no-input --fake-initial &&
     python manage.py inituser --username=root --password=rootroot --action=create_super_admin &&
     echo "from options.options import SysOptions; SysOptions.judge_server_token='${JUDGE_SERVER_TOKEN:-default_token}'" | python manage.py shell &&
     echo "from conf.models import JudgeServer; JudgeServer.objects.update(task_number=0)" | python manage.py shell &&
@@ -70,16 +70,17 @@ done
 
 # User creation is now handled in Dockerfile
 # Ensure proper permissions
-chown -R user:user $DATA $APP/dist
-# Create nginx log directory with proper permissions (avoid system dirs)
-if [ "$(id -u)" -eq 0 ]; then
-    mkdir -p /data/log/nginx
-    touch /data/log/nginx/nginx_access.log /data/log/nginx/nginx_error.log
-    chown -R nginx:nginx /data/log/nginx || true
-    chown -R user:user /data/log || true
-fi
+# chown -R user:user $DATA $APP/dist
+# Create log directory and files with proper permissions
+mkdir -p /data/log/nginx /data/log
+touch /data/log/supervisord.log /data/log/gunicorn.log /data/log/dramatiq.log
+touch /data/log/nginx/nginx_access.log /data/log/nginx/nginx_error.log
+chmod 666 /data/log/*.log /data/log/nginx/*.log
+chmod 777 /data/log /data/log/nginx
+ls -la /data/log/
 find $DATA/test_case -type d -exec chmod 710 {} \; 2>/dev/null || true
 find $DATA/test_case -type f -exec chmod 640 {} \; 2>/dev/null || true
 # Ensure nginx temp dirs exist and are writable
 mkdir -p /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/uwsgi /tmp/nginx/scgi
+# Run supervisord directly
 exec supervisord -c /app/deploy/supervisord.conf

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   oj-postgres:
     image: postgres:13
@@ -35,9 +33,9 @@ services:
     tmpfs:
       - /tmp
     volumes:
-      - ./data/backend/test_case:/test_case:ro
-      - ./data/judge_server/log:/log
-      - ./data/judge_server/run:/judger
+      - oj_backend_data_test_case:/test_case:ro
+      - oj_backend_data_judge_server_log:/log
+      - oj_backend_data_judge_server_run:/judger
     environment:
       - SERVICE_URL=http://oj-judge:8080
       - BACKEND_URL=https://backend.codeclash.page/api/judge_server_heartbeat/
@@ -59,7 +57,7 @@ services:
       - REDIS_PORT=6379
       - JUDGE_SERVER_TOKEN=your_secure_token_here_change_this
     volumes:
-      - ./data/backend:/data
+      - oj_backend_data:/data
     ports:
       - "8001:8000"
     depends_on:
@@ -70,3 +68,7 @@ services:
 volumes:
   postgres_data:
   oj_data:
+  oj_backend_data:
+  oj_backend_data_test_case:
+  oj_backend_data_judge_server_log:
+  oj_backend_data_judge_server_run:
