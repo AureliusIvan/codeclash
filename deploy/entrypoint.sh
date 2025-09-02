@@ -3,6 +3,10 @@
 APP=/app
 DATA=/data
 
+# Fix ownership on volumes as root (this is crucial for named volumes)
+chown -R user:user $DATA $APP/dist
+chown -R user:spj $DATA/test_case
+
 mkdir -p $DATA/log $DATA/config $DATA/ssl $DATA/test_case $DATA/public/upload $DATA/public/avatar $DATA/public/website
 
 if [ ! -f "$DATA/config/secret.key" ]; then
@@ -70,7 +74,6 @@ done
 
 # User creation is now handled in Dockerfile
 # Ensure proper permissions
-# chown -R user:user $DATA $APP/dist
 # Create log directory and files with proper permissions
 mkdir -p /data/log/nginx /data/log
 touch /data/log/supervisord.log /data/log/gunicorn.log /data/log/dramatiq.log
@@ -79,6 +82,7 @@ chmod 666 /data/log/*.log /data/log/nginx/*.log
 chmod 777 /data/log /data/log/nginx
 ls -la /data/log/
 find $DATA/test_case -type d -exec chmod 710 {} \; 2>/dev/null || true
+find $DATA/test_case -type d -exec chmod g+s {} \; 2>/dev/null || true  
 find $DATA/test_case -type f -exec chmod 640 {} \; 2>/dev/null || true
 # Ensure nginx temp dirs exist and are writable
 mkdir -p /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/uwsgi /tmp/nginx/scgi

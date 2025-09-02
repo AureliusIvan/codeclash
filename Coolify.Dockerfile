@@ -45,7 +45,6 @@ RUN groupadd -r user && groupadd -g 903 spj && groupadd -r nginx && \
     useradd -u 900 -r -g spj -s /bin/false server && \
     useradd -r -g nginx -s /bin/false nginx
 RUN mkdir -p /home/user/.local && chown -R user:user /home/user
-USER user
 
 COPY --chown=user:user ./deploy/requirements.txt /app/deploy/
 RUN pip install --no-cache-dir -r /app/deploy/requirements.txt
@@ -60,7 +59,6 @@ RUN chmod -R u=rwX,go=rX ./ && \
     chown -R user:user /data && \
     mkdir -p /data/log/nginx /var/cache/nginx /var/run/nginx && \
     chown -R nginx:nginx /data/log/nginx /var/cache/nginx /var/run/nginx
-USER user
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 CMD [ "/usr/local/bin/python3", "/app/deploy/health_check.py" ]
 EXPOSE 8000
