@@ -11,14 +11,12 @@ services:
     ports:
       - "5433:5432"
     restart: unless-stopped
-
   oj-redis:
     image: redis:6-alpine
     container_name: oj-redis
     ports:
       - "6380:6379"
     restart: unless-stopped
-
   oj-judge:
     image: registry.cn-hongkong.aliyuncs.com/oj-image/judge:1.6.1
     restart: always
@@ -40,7 +38,6 @@ services:
       - SERVICE_URL=http://oj-judge:8080
       - BACKEND_URL=https://backend.codeclash.page/api/judge_server_heartbeat/
       - TOKEN=your_secure_token_here_change_this
-
   oj-backend:
     build:
       context: .
@@ -58,13 +55,13 @@ services:
       - JUDGE_SERVER_TOKEN=your_secure_token_here_change_this
     volumes:
       - oj_backend_data:/data
+      - oj_backend_data_test_case:/data/test_case
     ports:
       - "8001:8000"
     depends_on:
       - oj-postgres
       - oj-redis
     restart: unless-stopped
-
 volumes:
   postgres_data:
   oj_data:
