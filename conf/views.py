@@ -239,3 +239,8 @@ class DashboardInfoAPI(APIView):
                 "STATIC_CDN_HOST": get_env("STATIC_CDN_HOST", default="")
             }
         })
+
+
+class HealthCheckAPI(APIView):
+    def get(self, request):
+        return self.success({"status": "healthy", "service": "OnlineJudge API"})
