@@ -8,8 +8,6 @@ services:
       POSTGRES_PASSWORD: onlinejudge123
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
     restart: unless-stopped
   oj-redis:
     image: redis:6-alpine
